@@ -1,6 +1,6 @@
 {
   "name": "@abi-software/flatmapvuer",
-  "version": "0.1.36-beta-features-5",
+  "version": "0.1.36-beta-features-6",
   "main": "./dist/flatmapvuer.common.js",
   "files": [
     "dist/*",
