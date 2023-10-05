@@ -49,6 +49,7 @@ let FlatmapQueries = function(){
     this.controller = undefined
     this.uberons = []
     this.lookUp = []
+    this.pmrResults = []
   }
 
   this.createTooltipData = async function (eventData) {
@@ -77,7 +78,8 @@ let FlatmapQueries = function(){
       featureId: eventData.resource,
       hyperlinks: hyperlinks,
       provenanceTaxonomy: eventData.provenanceTaxonomy,
-      provenanceTaxonomyLabel: taxonomyLabel
+      provenanceTaxonomyLabel: taxonomyLabel,
+      pmrResults: this.pmrResults
     }
     return tooltipData
   }
@@ -238,7 +240,8 @@ let FlatmapQueries = function(){
         })
       })
       let prom2 = await this.pubmedQueryOnIds(eventData)
-      let results = await Promise.all([prom1, prom2])
+      let prom3 = await this.pmrQueryOnCurie(eventData)
+      let results = await Promise.all([prom1, prom2, prom3])
       return results
   }
 
@@ -409,6 +412,54 @@ let FlatmapQueries = function(){
     let params = new URLSearchParams()
     params.append('term', ids)
     return url + params.toString()
+  }
+
+  // 
+  this.pmrQueryOnCurie = function(eventData){
+    return new Promise(resolve=>{
+      let resource = eventData.resource
+      if(!resource || resource.length === 0) return
+      const sql = this.buildPmrStatement(resource)
+      this.flatmapQuery(sql).then(data=>{
+        // Create pubmed url on paths if we have them
+        if (data.values.length > 0){
+          this.processPmrResults(data)
+        }
+        resolve(true)
+      })
+    })
+  },
+  this.buildPmrStatement = function (uberons) {
+    uberons.push('ILX:0793144')
+    let sql = `select model, workspace, exposure, score from pmr_models where term in (`
+    if (uberons.length === 1) {
+      sql += `'${uberons[0]}')`
+    } else if (uberons.length > 1) {
+      for (let i in uberons) {
+        sql += `'${uberons[i]}'${i >= uberons.length - 1 ? ') order by score' : ','} `
+      }
+    }
+    return sql
+  },
+  this.processPmrResults = function(result){
+    this.pmrResults = []
+
+    // below builds a lookup table of the index for each key
+    let keys = {}
+    result.keys.forEach((k,i)=>keys[k]=i)
+
+    result.values.forEach(r=>{
+      let model = r[keys.model]
+      let workspace = r[keys.workspace]
+      let exposure = r[keys.exposure]
+      let score = r[keys.score]
+      this.pmrResults.push({
+        model: model,
+        workspace: workspace,
+        exposure: exposure,
+        score: score
+      })
+    })
   }
 }
 

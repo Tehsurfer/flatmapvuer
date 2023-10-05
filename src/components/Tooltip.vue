@@ -70,6 +70,11 @@
           Search for data on components
         </el-button>
 
+        <el-button v-show="entry.pmrResults && entry.pmrResults.length > 0" class="button" @click="openPmr">
+          Search datasets on PMR
+        </el-button>
+
+
         <external-resource-card :resources="resources"></external-resource-card>
 
       </div>
@@ -197,6 +202,9 @@ export default {
     pubmedSearchUrlUpdate: function (val){
       this.pubmedSearchUrl = val
     },
+    openPmr: function(){
+      EventBus.$emit('onActionClick', {type:'PMR', data: this.entry.pmrResults})
+    }
   }
 };
 </script>

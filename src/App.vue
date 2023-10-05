@@ -66,6 +66,9 @@ export default {
       if (resource.eventType === "click") {
         console.log('resource', resource);
       }
+      if (resource.type === "PMR") {
+        console.log('resource', resource);
+      }
     },
     FlatmapReady: function(component) {
       console.log(component);
