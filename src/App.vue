@@ -117,7 +117,31 @@ export default {
     FlatmapReady: function (component) {
       console.log(component)
       let taxon = component.mapImp.describes
+
+      // Test code for Dave
       let id = component.mapImp.addMarker('UBERON:0000948')
+      component.mapImp.addMarker('UBERON:0016508')
+      component.mapImp.addMarker('ILX:0793082')
+      component.mapImp.addMarker('ILX:0793082')
+      component.mapImp.addMarker('UBERON:0002080')
+      component.mapImp.addMarker('UBERON:0016508')
+      component.mapImp.addMarker('UBERON:0016508')
+      component.mapImp.addMarker('UBERON:0016508')
+      component.mapImp.addMarker('UBERON:0016508')
+      component.mapImp.addMarker('ILX:0793082')
+      component.mapImp.addMarker('ILX:0793082')
+      component.mapImp.addMarker('UBERON:0002080')
+      component.mapImp.addMarker('ILX:0793082')
+      component.mapImp.addMarker('ILX:0793082')
+      component.mapImp.addMarker('UBERON:0002080')
+      component.mapImp.addMarker('ILX:0793082')
+      component.mapImp.addMarker('ILX:0793082')
+      component.mapImp.addMarker('UBERON:0002080')
+      component.mapImp.addMarker('ILX:0793082')
+      component.mapImp.addMarker('ILX:0793082')
+      component.mapImp.addMarker('UBERON:0002080')
+      component.mapImp.addMarker('NCBITaxon:10116')
+      component.mapImp.clearMarkers()
       window.flatmapImp = component.mapImp
       component.enablePanZoomEvents(true)
       //component.showPathwaysDrawer(false);
